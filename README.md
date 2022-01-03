@@ -1,7 +1,8 @@
 # babel-plugin-amd-checker
 
-[![NPM version](https://badge.fury.io/js/babel-plugin-amd-checker.png)](http://badge.fury.io/js/babel-plugin-amd-checker)
-[![devDependency Status](https://david-dm.org/prantlf/babel-plugin-amd-checker/dev-status.svg)](https://david-dm.org/prantlf/babel-plugin-amd-checker#info=devDependencies)
+[![Latest version](https://img.shields.io/npm/v/babel-plugin-amd-checker)
+ ![Dependency status](https://img.shields.io/librariesio/release/npm/babel-plugin-amd-checker)
+](https://www.npmjs.com/package/babel-plugin-amd-checker)
 
 A [Babel] plugin to check the format of your modules when compiling your code using Babel. This plugin allows you to abort the module transformation, if the module source complies with AMD and let the transformation apply only on ESM modules. transform the path of each source module using a custom JavaScript function.
 

@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-amd-checker",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Module format checking plugin for Babel usable in both Node.js the web browser environments.",
   "author": {
     "name": "Ferdinand Prantl",
@@ -38,7 +38,12 @@
       "@semantic-release/release-notes-generator",
       "@semantic-release/changelog",
       "@semantic-release/npm",
-      ["@semantic-release/github", { "failComment": false }],
+      [
+        "@semantic-release/github",
+        {
+          "failComment": false
+        }
+      ],
       "@semantic-release/git"
     ]
   },

@@ -27,7 +27,7 @@ yarn add babel-plugin-amd-checker
 
 ## Babel Configuration Examples
 
-Prepend path to utility modules to be able to import them from `utils/...` without always providing the actual full path:
+Prevent the transpiler to wrap source files that are already wrapped by `define` or `require` as AMD modules:
 
 ```js
 {
@@ -54,6 +54,23 @@ A typical configuration combined with [babel-plugin-module-resolver-standalone] 
       }
     ]
   ]
+}
+```
+
+Error handling during the transpilation in a RequireJS plugin:
+
+```js
+var amdChecker = require('babel-plugin-amd-checker')
+babel.registerPlugin('amd-checker', amdChecker);
+
+var code;
+try {
+  code = babel.transform(text, options).code;
+} catch (error) {
+  if (!(error instanceof amdChecker.AmdDetected)) {
+    return onload.error(error);
+  }
+  code = text;
 }
 ```
 

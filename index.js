@@ -9,19 +9,32 @@
 })(this, function () {
   // Detects a call to define, require or require.config functions.
   function isDefineOrRequireOrRequireConfig(path) {
-    var expr, callee, args, arg;
+    var expr, callee, args, arg, func, obj;
 
     if (!path.isExpressionStatement()) return false;
 
-    expr = path.get("expression");
+    expr = path.get('expression');
+    if (expr.isSequenceExpression()) {
+      expr = expr.get('expressions')[0];
+    }
     if (!expr.isCallExpression()) return false;
 
-    args = expr.get("arguments");
+    args = expr.get('arguments');
     if (args.length === 0) return false;
 
-    callee = expr.get("callee");
+    callee = expr.get('callee');
+    // namespace.define(...)
+    if (callee.isMemberExpression()) {
+      obj = callee.get('object');
+      if (!obj.isIdentifier()) return false;
+      func = callee.get('property');
+    } else {
+      func = callee;
+    }
+    if (!func.isIdentifier()) return false;
+
     // define('name', [deps], factory)
-    if (callee.isIdentifier({ name: "define" })) {
+    if (func.node.name === 'define') {
       arg = args.shift();
       if (arg.isStringLiteral()) {
         if (args.length === 0) return false;
@@ -33,17 +46,18 @@
       }
       return arg.isFunctionExpression() || arg.isObjectExpression();
     }
+
     // require([deps], success, error)
-    if (callee.isIdentifier({ name: "require" })) {
+    if (func.node.name === 'require') {
       arg = args.shift();
       if (!arg.isArrayExpression() || args.length === 0) return false;
       arg = args.shift();
       return arg.isFunctionExpression();
     }
+
     // require.config(object)
-    return callee.isMemberExpression() &&
-      callee.get('object').isIdentifier({ name: "require" }) &&
-      callee.get('property').isIdentifier({ name: "config" });
+    return obj && obj.isIdentifier({ name: 'require' }) &&
+      func.isIdentifier({ name: 'config' });
   }
 
   // Thrown to abort the transpilation of an already AMD module.
